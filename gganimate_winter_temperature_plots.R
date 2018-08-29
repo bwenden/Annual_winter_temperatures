@@ -14,20 +14,14 @@ wrmap <- ggplot(winter, aes(x,y, fill=layer)) +
 plot(wrmap)
 
 ###Animated plots with mean annual winter temperatures 1880-2017
-ggplot(winter, aes(x,y, fill=layer)) + 
+p <- ggplot(winter, aes(x,y, fill=layer)) + 
   geom_raster(interpolate=TRUE)+
   geom_polygon(data=wr,aes(x = long, y = lat,group=group),fill = NA, colour = "black") +
-  theme_bw() + scale_fill_viridis(option="magma")+
+  theme_bw() + scale_fill_gradient2(midpoint=0, low="blue", mid="white", high="red")+
   coord_equal() + 
   labs(title = 'Year: {frame_time}') +
   transition_time(Year) +
   ease_aes('linear')
 
-ggplot(winter, aes(x,y, fill=layer)) + 
-  geom_raster(interpolate=TRUE)+
-  geom_polygon(data=wr,aes(x = long, y = lat,group=group),fill = NA, colour = "black") +
-  theme_bw() + scale_fill_viridis(option="magma")+
-  coord_equal() + 
-  labs(title = 'Year: {closest_state}') +
-  transition_states(Year, transition_length=1, state_length=3) +
-  ease_aes('linear')
+animate(p, nframes=138, fps=2, height=500,width=625)
+anim_save(p, 'winter_temp_anomalies.gif)
